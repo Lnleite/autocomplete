@@ -1,53 +1,79 @@
+import exp from "constants";
 import { TextTree } from "./textTree";
 
 describe("Text tree tests", () => {
-  const textTree = new TextTree();
+  let textTree = new TextTree();
 
-  test("add", () => {
+  afterEach(() => {
+    textTree = new TextTree();
+  });
+
+  test("add word to the tree", () => {
     textTree.addWord("string");
     const isFound = textTree.findWord("string");
     expect(isFound).toBeTruthy();
+
+    expect(textTree.head.children["s"].val === "s").toBeTruthy();
+    expect(textTree.head.children["s"].children["t"].val === "t").toBeTruthy();
+    expect(
+      textTree.head.children["s"].children["t"].children["r"].val === "r"
+    ).toBeTruthy();
+    expect(
+      textTree.head.children["s"].children["t"].children["r"].children["i"]
+        .val === "i"
+    ).toBeTruthy();
+    expect(
+      textTree.head.children["s"].children["t"].children["r"].children["i"]
+        .children["n"].val === "n"
+    ).toBeTruthy();
+    expect(
+      textTree.head.children["s"].children["t"].children["r"].children["i"]
+        .children["n"].children["g"].val === "g"
+    ).toBeTruthy();
+  });
+
+  test("add second word similar to first", () => {
+    textTree.addWord("stir");
+    textTree.addWord("string");
+
+    const isStringFound = textTree.findWord("string");
+    const isStirFound = textTree.findWord("stir");
+
+    expect(isStringFound).toBeTruthy();
+    expect(isStirFound).toBeTruthy();
+  });
+
+  test("getCombos for s, should return both words", () => {
+    const combos = textTree.getCombos("s");
+
+    expect(["string", "stir"]).toEqual(expect.arrayContaining(combos));
+  });
+
+  test("getCombos for s with specific amount", () => {
+    textTree.addWord("stir");
+    textTree.addWord("string");
+    textTree.addWord("sing");
+    textTree.addWord("sir");
+    textTree.addWord("sam");
+
+    const combos = textTree.getCombos("s", 2);
+
+    expect(["string", "stir", "sing", "sir", "sam"]).toEqual(
+      expect.arrayContaining(combos)
+    );
+    expect(combos.length).toEqual(2);
+  });
+
+  test("remove word", () => {
+    textTree.addWord("stir");
+    textTree.addWord("string");
+    textTree.removeWord("stir");
+    const isStirFound = textTree.findWord("stir");
+
+    expect(isStirFound).toBeFalsy();
+
+    expect(
+      textTree.head.children["s"].children["t"].children["i"] === undefined
+    ).toBeTruthy();
   });
 });
-
-/*
-
-const trie = new TextTree();
-
-trie.add("string");
-// console.log(trie.head.children["s"]?.children["t"]);
-
-trie.add("stir");
-trie.add("art");
-
-// console.log(trie.head);
-// console.log(trie.head.children["a"]?.val === "a");
-// console.log(trie.head.children["a"]?.children["r"]?.val === "r");
-// console.log(trie.head.children["a"]?.children["r"]?.children["t"]?.val === "t");
-
-// console.log(trie.head.children["s"]?.children["t"]);
-
-// console.log(trie.head.children["s"]?.val === "s");
-// console.log(trie.head.children["s"]?.children["t"]?.val === "t");
-// console.log(trie.head.children["s"]?.children["t"]?.children["r"]?.val === "r");
-// console.log(trie.head.children["s"]?.children["t"]?.children["i"]?.val === "i");
-
-console.log(trie.getCombos("s"));
-
-console.log(trie.removeWord("art"));
-console.log(trie.removeWord("stir"));
-console.log(trie.getCombos("s"));
-
-let stack = [];
-stack.push(trie.head);
-while (stack.length > 0) {
-  let node = stack.pop();
-  console.log(node);
-
-  if (Object.keys(node.children).length > 0) {
-    for (let key in node.children) {
-      stack.push(node.children[key]);
-    }
-  }
-}
-*/
