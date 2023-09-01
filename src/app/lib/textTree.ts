@@ -1,6 +1,6 @@
 class TextTreeNode {
-  val: string
-  children: Record<string, TextTreeNode> = {}
+  val: string;
+  children: Record<string, TextTreeNode> = {};
 
   constructor(val: string) {
     this.val = val;
@@ -9,7 +9,7 @@ class TextTreeNode {
 }
 
 export class TextTree {
-  head: TextTreeNode
+  head: TextTreeNode;
 
   constructor() {
     this.head = new TextTreeNode("");
@@ -65,7 +65,7 @@ export class TextTree {
     }
 
     while (stack.length > 0) {
-      let [node, str] : [TextTreeNode, string] = stack.pop()!;
+      let [node, str]: [TextTreeNode, string] = stack.pop()!;
 
       str += node.val;
       if (Object.keys(node.children).length > 0) {
@@ -102,7 +102,9 @@ export class TextTree {
     while (previousNodes.length > 0) {
       let node = previousNodes.pop();
       if (
-        node && previousNode && node.children[previousNode.val] &&
+        node &&
+        previousNode &&
+        node.children[previousNode.val] &&
         Object.keys(node.children[previousNode.val].children).length === 0
       ) {
         delete node.children[previousNode.val];
@@ -124,6 +126,7 @@ export class TextTree {
         break;
       } else {
         currNode = nextNode;
+        valIndex++;
       }
     }
 

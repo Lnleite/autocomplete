@@ -1,12 +1,12 @@
-import { TextTree } from "./textTree.js";
+import { TextTree } from "./textTree";
 
 describe("Text tree tests", () => {
   const textTree = new TextTree();
 
   test("add", () => {
     textTree.addWord("string");
-
-    expect(textTree.findWord("string")).toBeTruthy();
+    const isFound = textTree.findWord("string");
+    expect(isFound).toBeTruthy();
   });
 });
 
